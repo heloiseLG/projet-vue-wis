@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Zoo de Montpellier</title>
+  </head>
+  <body>
+    <div id="myapp">{{ responsedata }}</div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      const API = 'https://data.montpellier3m.fr/api/3/action/package_show?id=f7620e97-429f-4f07-82cf-00eb8d352298&utm_source=Site%20internet&utm_campaign=Clic%20sur%20%3A%20https%3A//data.montpellier3m.fr/api/3/action/package_show/f7620e97-429f-4f07-82cf-00eb8d352298&utm_term=https%3A//data.montpellier3m.fr/api/3/action/package_show/f7620e97-429f-4f07-82cf-00eb8d352298'
+
+      const zoo = {
+        data() {
+          return {
+            responsedata: {},
+          };
+        },
+        methods: {
+          async fetchApi() {
+            await axios
+              .get(API)
+              .then((response) => {
+                this.responsedata = response.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+        },
+        mounted() {
+          this.fetchApi();
+        },
+      };
+      const myapp = Vue.createApp(zoo).mount("#myapp");
+    </script>
+  </body>
+</html>
