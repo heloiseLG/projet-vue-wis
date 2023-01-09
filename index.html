@@ -1,27 +1,64 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Facts sur les chats</title>
-  </head>
-  <body>
-    <h1>Facts sur les chats</h1>
-    <img src="https://cataas.com/cat/gif" class="card-img-top" alt="cats" />
-    <button onClick="window.location.reload();">Next</button>
-    <ul id="facts"></ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>commits-example</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="demo" class="container">
+    <h1 class="container text-center">Facts sur les chats</h1>
+    <div class="container text-center">
+        <div class="col mb-4">
+          <img src="https://cataas.com/cat/gif" class="rounded" alt="cats">
+        </div>
+          <button type="button" class="btn btn-outline-info mb-3" @click="reloadPage">Next</button>
+      </div>
+      <div v-for="fact in tab" class="card mb-3">
+        <div class="card-body">
+          {{fact.fact}}
+        </div>
+      </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
     <script>
-      axios.get('https://catfact.ninja/facts?limit=10')
-        .then(response => {
-          const data = response.data;
-          const facts = data['data'];
-          for (const fact of facts) {
-            const li = document.createElement('li');
-            li.innerHTML = fact['fact'];
-            document.getElementById('facts').appendChild(li);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      const apiURL =
+        "https://catfact.ninja/facts?limit=10";
+      const config = {
+      };
+
+      Vue.createApp({
+        data() {
+          return {
+            responsedata: {},
+            tab: []
+          };
+        },
+
+        created: function () {
+          this.fetchDataAsync();
+        },
+        methods: {
+          fetchDataAsync: async function () {
+            try {
+              const response = await axios.get(apiURL)
+              this.responsedata = response.data
+              this.tab = response.data.data
+
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          reloadPage() {
+            window.location.reload();
+          },
+        },
+      }).mount("#demo");
     </script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>

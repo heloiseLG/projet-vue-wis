@@ -1,27 +1,62 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Facts sur les chats</title>
-  </head>
-  <body>
-    <h1>Facts sur les chats</h1>
-    <img src="https://cataas.com/cat/gif" class="card-img-top" alt="cats" />
-    <button onClick="window.location.reload();">Next</button>
-    <ul id="facts"></ul>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-      axios.get('https://catfact.ninja/facts?limit=10')
-        .then(response => {
-          const data = response.data;
-          const facts = data['data'];
-          for (const fact of facts) {
-            const li = document.createElement('li');
-            li.innerHTML = fact['fact'];
-            document.getElementById('facts').appendChild(li);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    </script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>commits-example</title>
+		<link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/vuetify@latest/dist/vuetify.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/vuetify@latest/dist/vuetify.min.js"></script>
+	</head>
+	<body>
+        <v-app id="demo">
+            
+                <h1>Facts sur les chats</h1>
+                <img src="https://cataas.com/cat/gif" class="card-img-top" alt="cats" />
+                <button @click="reloadPage">Reload</button>
+                <li v-for="fact in tab">{{fact.fact}}</li>
+            
+        </v-app>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/vue@3"></script>
+		<script>
+            import Vue from 'vue';
+            import Vuetify from 'vuetify';
+
+            Vue.use(Vuetify);
+
+			const apiURL =
+				"https://catfact.ninja/facts?limit=10";
+			const config = {
+			};
+
+			Vue.createApp({
+				data() {
+					return {
+                        responsedata : {},
+						tab: []
+					};
+				},
+
+				created: function () {
+					this.fetchDataAsync();
+				},
+				methods: {
+					fetchDataAsync: async function () {
+						try {
+					  	const response = await axios.get(apiURL)
+						  this.responsedata = response.data
+                          this.tab = response.data.data
+
+					  } catch(error) {
+					    console.log(error);
+					  }
+					},
+                    reloadPage() {
+                        window.location.reload();
+                    },
+				},
+			}).mount("#demo");
+		</script>
+	</body>
 </html>
